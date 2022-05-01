@@ -1,22 +1,41 @@
-import React from 'react'
-import classes from './Toggler.module.css'
-import { themeActions } from '../store/DarkThemeReducer'
-import { useSelector, useDispatch } from 'react-redux'
+import React from "react";
+import classes from "./Toggler.module.css";
+import { themeActions } from "../store/DarkThemeReducer";
+import { useSelector, useDispatch } from "react-redux";
 
-const Toggler = () => {
-    const themeData = useSelector((state) => state.DarkMode)
-    const dispatch = useDispatch()
-    const logger = (logs) => {
-        dispatch(
-            themeActions.toggleTheme(logs.target.checked)
-        );
-    }
-    const classname = themeData.theme ? classes.dark : '';
-    return (
-        <div className={"form-check form-switch form-switch-sm " + classes.button + " " + classname}>
-            <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onChange={logger} checked={themeData.theme} />
-        </div>
-    )
-}
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
-export default Toggler
+const Toggler = (props) => {
+  const { isNavExpanded, setIsNavExpanded } = props;
+  const themeData = useSelector((state) => state.DarkMode);
+  const dispatch = useDispatch();
+  const toggleDarkMode = () => {
+    dispatch(themeActions.toggleTheme(true));
+  };
+  const toggleLightMode = () => {
+    dispatch(themeActions.toggleTheme(false));
+  };
+  const classname = themeData.theme ? classes.dark : "";
+  return (
+    <div
+      className={classname}
+      onClick={() => {
+        if (isNavExpanded) {
+          setIsNavExpanded(false);
+        }
+      }}
+    >
+      {themeData.theme ? (
+        <LightModeIcon
+          style={{ cursor: "pointer" }}
+          onClick={toggleLightMode}
+        />
+      ) : (
+        <DarkModeIcon style={{ cursor: "pointer" }} onClick={toggleDarkMode} />
+      )}
+    </div>
+  );
+};
+
+export default Toggler;
